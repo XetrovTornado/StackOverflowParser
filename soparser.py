@@ -11,7 +11,7 @@ except IndexError:
 
 if not "stackoverflow.com" in website and not "stackexchange.com" in website:
 	print("Only StackOverflow webpages are supported.")
-	sys.exit()
+	# sys.exit()
 
 # Extract the html from the webpage
 html = u.urlopen(website).read().decode('utf-8')
@@ -31,7 +31,7 @@ class WebScraper(HTMLParser):
 			#print("div found: " + str(self.divsfound))
 			self.divsfound += 1
 		if tag == "a" and self.startfound:
-			print("(%s)" % attrs[0][1])
+			print("(%s)" % attrs[0][1], end="")
 	def handle_endtag(self, tag):
 		if tag == "div" and self.startfound:
 			#print("end div found")

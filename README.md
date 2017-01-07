@@ -13,3 +13,6 @@ Goal is to search StackOverflow for answers in the terminal.
 ### Goals
 - Auto search StackOverflow and StackExchange for an answer
 - Provide symbols for quotes and code
+- Add text-to-speech functionality
+- Add more StackExchange websites
+- Handle ul and li tags
