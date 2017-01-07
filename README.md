@@ -8,6 +8,9 @@ Goal is to search StackOverflow for answers in the terminal.
 3. Links are in parentheses
 4. When prompted for the next post, type n or no and press RETURN to quit or press RETURN without typing anything to continue
 
+###### Features
+__Features__
+
 ### Goals
 - Auto search StackOverflow and StackExchange for an answer
 - Provide symbols for quotes and code
