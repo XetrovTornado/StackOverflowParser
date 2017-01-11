@@ -26,19 +26,33 @@ if site not in sites:
 else:
 	print("Searching " + site)
 
-questions = requests.get("https://api.stackexchange.com/2.2/search/advanced?answers=1&&q="+keywords+"&&site=" + site).json()
+page = 1
+lastpage = 1
+while True:
+	if lastpage not == page:
+		lastpage = page
+		questions = requests.get("https://api.stackexchange.com/2.2/search/advanced?answers=1&&q="+keywords+"&&site=" + site + "&&page=" + page).json()['items']
 
-if len(questions['items']) == 0:
-	print("No results matched your query.")
-	sys.exit()
+	if len(questions) == 0:
+		print("No results matched your query.")
+		sys.exit()
 
-for i, option in enumerate(questions['items']):
-	print("%d. %s" % (i, html.unescape(option['title'])))
-print("Type in a number or option: ")
-q = input()
-try:
-	q = questions['items'][int(q)]['link']
-except:
-	pass
-
-os.system('python3 soparser.py ' + q)
+	for i, option in enumerate(questions):
+		print("%d. %s" % (i, html.unescape(option['title'])))
+	print("30. Next Page")
+	print("Type in a number or option: ")
+	q = input()
+	try:
+		q = questions[int(q)]['link']
+	except ValueError:
+		if int(q) == 30:
+			q = "Next Page"
+		pass
+	if q == "Next Page":
+		page += 1
+	elif q not in questions:
+		print("Invalid option.")
+		continue
+	else:
+		os.system('python3 soparser.py ' + q)
+		break
