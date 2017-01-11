@@ -18,7 +18,7 @@ print("Type in a number or option: ")
 site = input()
 try:
 	site = sites[int(site)]
-except:
+except ValueError:
 	pass
 if site not in sites:
 	print("THAT ISN'T A WEBSITE!!!!")
