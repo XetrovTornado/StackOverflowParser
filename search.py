@@ -28,6 +28,10 @@ else:
 
 questions = requests.get("https://api.stackexchange.com/2.2/search/advanced?answers=1&&q="+keywords+"&&site=" + site).json()
 
+if len(questions['items']) == 0:
+	print("No results matched your query.")
+	sys.exit()
+
 for i, option in enumerate(questions['items']):
 	print("%d. %s" % (i, html.unescape(option['title'])))
 print("Type in a number or option: ")
