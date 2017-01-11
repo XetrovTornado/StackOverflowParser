@@ -16,3 +16,4 @@ Goal is to search StackOverflow for answers in the terminal.
 - Add text-to-speech functionality
 - Add more StackExchange websites
 - Handle ul and li tags
+- Show date and author of post

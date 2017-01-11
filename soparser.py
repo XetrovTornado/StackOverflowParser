@@ -9,10 +9,6 @@ except IndexError:
 	print("No webpage was provided.")
 	sys.exit()
 
-if not "stackoverflow.com" in website and not "stackexchange.com" in website:
-	print("Only StackOverflow webpages are supported.")
-	# sys.exit()
-
 # Extract the html from the webpage
 html = u.urlopen(website).read().decode('utf-8')
 
