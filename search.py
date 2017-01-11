@@ -2,7 +2,31 @@ import requests, sys, os, html
 
 keywords = " ".join(sys.argv[1:])
 
-questions = requests.get("https://api.stackexchange.com/2.2/search/advanced?answers=1&&q="+keywords+"&&site=askubuntu&&page=2").json()
+sites = [
+	"stackoverflow.com",
+	"askubuntu.com",
+	"superuser.com",
+	"serverfault.com",
+	"unix.stackexchange.com"
+	]
+
+print("Which website do you want to check?")
+
+for i, site in enumerate(sites):
+	print("%d. %s" % (i, site))
+print("Type in a number or option: ")
+site = input()
+try:
+	site = sites[int(site)]
+except:
+	pass
+if site not in sites:
+	print("THAT ISN'T A WEBSITE!!!!")
+	sys.exit()
+else:
+	print("Searching " + site)
+
+questions = requests.get("https://api.stackexchange.com/2.2/search/advanced?answers=1&&q="+keywords+"&&site=" + site).json()
 
 for i, option in enumerate(questions['items']):
 	print("%d. %s" % (i, html.unescape(option['title'])))
