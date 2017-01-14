@@ -16,36 +16,53 @@ except ValueError:
 	sys.exit()
 
 # Parse the data
-class WebScraper(HTMLParser):
+class DataFinder(HTMLParser):
 	def __init__(self):
 		HTMLParser.__init__(self)
 		self.startfound = False
-		self.divsfound = 0
+		self.tagsfound = 0
+		self.tag = ""
+		self.type = ""
+		self.value = ""
+		self.text = ""
+		self.returnlist = []
+	def find(self, stuff, tag, findtype, value):
+		self.tag = tag
+		self.type = findtype
+		self.value = value
+		self.text = ""
+		self.returnlist = []
+		self.feed(stuff)
+		return self.returnlist
 	def handle_starttag(self, tag, attrs):
 		# print("found starttag, tag=" + tag + " attrs=" + str(attrs))
-		if tag == "div" and len(attrs) > 0 and ("class", "post-text") in attrs:
-			#print("start found")
+		if tag == self.tag and len(attrs) > 0 and (self.type, self.value) in attrs:
 			self.startfound = True
-		if tag == "div" and self.startfound:
-			#print("div found: " + str(self.divsfound))
-			self.divsfound += 1
+		if tag == self.tag and self.startfound:
+			self.tagsfound += 1
+		# show links attached to words
 		if tag == "a" and self.startfound:
-			print("(%s)" % attrs[0][1], end="")
+			self.text += "(%s)" % attrs[0][1]
 	def handle_endtag(self, tag):
 		if tag == "div" and self.startfound:
-			#print("end div found")
-			self.divsfound -= 1
-			if self.divsfound <= 0:
-				print("\n------------------")
-				continu = input("Next post? ")
-				if continu.startswith("n"):
-					sys.exit()
-				self.startfound = False
+			self.tagsfound -= 1
+			self.startfound = False
+			self.returnlist.append(self.text)
+			self.text = ""
 	def handle_data(self, data):
 		if not data.strip() == "" and self.startfound:
-			print(data, end="")
+			self.text += data
 		pass
 
-
-WebScraper().feed(html)
-
+df = DataFinder()
+posts = df.find(html, "div", "class", "post-text")
+times = df.find(html, "div", "class", "user-action-time")
+postindex = 0
+while postindex < len(posts):
+	print(posts[postindex] + times[postindex])
+	postindex += 1
+	print("\n------------------")
+	continu = input("Next post? ")
+	if continu.startswith("n"):
+		sys.exit()
+		break
