@@ -1,6 +1,5 @@
 # StackOverflowParser
-Searches StackOverflow for answers in the terminal.
-Parses a StackOverflow page to show posts in a terminal. 
+Searches StackOverflow for answers and then parses a the page to show posts in a terminal. 
 
 ### How to use
 1. Run search.py in python3 and add your search query as an extra argument 
@@ -12,6 +11,7 @@ Parses a StackOverflow page to show posts in a terminal.
 ### Features
 - Posts are seperated by lines of dashes
 - Links are in parentheses
+- Searches for an answer by relevance
 
 ### Goals
 - Provide symbols for quotes and code

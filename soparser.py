@@ -8,9 +8,12 @@ try:
 except IndexError:
 	print("No webpage was provided.")
 	sys.exit()
-
-# Extract the html from the webpage
-html = u.urlopen(website).read().decode('utf-8')
+try:
+	# Extract the html from the webpage
+	html = u.urlopen(website).read().decode('utf-8')
+except ValueError:
+	print("Invalid option.")
+	sys.exit()
 
 # Parse the data
 class WebScraper(HTMLParser):
@@ -42,6 +45,7 @@ class WebScraper(HTMLParser):
 		if not data.strip() == "" and self.startfound:
 			print(data, end="")
 		pass
+
 
 WebScraper().feed(html)
 
