@@ -1,8 +1,12 @@
 # StackOverflowParser
 Searches StackOverflow for answers and then parses a the page to show posts in a terminal. 
 
+### Requirements
+- Python 3.X
+- Terminal Emulator
+
 ### How to use
-1. Run search.py in python3 and add your search query as an extra argument 
+1. Run stacksearch in the terminal and add your search query as an extra argument 
 2. Choose a StackExchange website that best fits your question
 3. Choose a question that may answer your question
 4. Read the question's description
