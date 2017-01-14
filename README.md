@@ -12,9 +12,10 @@ Searches StackOverflow for answers and then parses a the page to show posts in a
 - Posts are seperated by lines of dashes
 - Links are in parentheses
 - Searches for an answer by relevance
+- Shows date of posts
+- Ad-free
 
 ### Goals
 - Provide symbols for quotes and code
 - Add text-to-speech functionality
 - Handle ul and li tags
-- Show date and author of post
