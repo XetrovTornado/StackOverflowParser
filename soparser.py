@@ -19,14 +19,12 @@ except ValueError:
 class DataFinder(HTMLParser):
 	def __init__(self):
 		HTMLParser.__init__(self)
+		# Initialize values
+		self.find("", "", "", "")
+		 
+	def find(self, stuff, tag, findtype, value):
 		self.startfound = False
 		self.tagsfound = 0
-		self.tag = ""
-		self.type = ""
-		self.value = ""
-		self.text = ""
-		self.returnlist = []
-	def find(self, stuff, tag, findtype, value):
 		self.tag = tag
 		self.type = findtype
 		self.value = value
@@ -34,17 +32,21 @@ class DataFinder(HTMLParser):
 		self.returnlist = []
 		self.feed(stuff)
 		return self.returnlist
+
 	def handle_starttag(self, tag, attrs):
 		# print("found starttag, tag=" + tag + " attrs=" + str(attrs))
 		if tag == self.tag and len(attrs) > 0 and (self.type, self.value) in attrs:
 			self.startfound = True
-		if tag == self.tag and self.startfound:
-			self.tagsfound += 1
-		# show links attached to words
-		if tag == "a" and self.startfound:
-			self.text += "(%s)" % attrs[0][1]
-		if tag == "li" and self.startfound:
-			self.text += "\n- "
+		if self.startfound:
+			# count how many tags of the same type have been found to correctly stop printing
+			if tag == self.tag:
+				self.tagsfound += 1
+			# show links attached to words
+			if tag == "a":
+				self.text += "(%s)" % attrs[0][1]
+			# show bullet points of lists
+			if tag == "li":
+				self.text += "\n- "
 	def handle_endtag(self, tag):
 		if tag == "div" and self.startfound:
 			self.tagsfound -= 1

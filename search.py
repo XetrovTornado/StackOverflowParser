@@ -33,16 +33,36 @@ def get_site():
 		print("Searching " + site)
 	return site
 
-def get_page(pagenum):
+def get_page(page):
 	return requests.get("https://api.stackexchange.com/2.2/search/advanced?sort=relevance&&answers=1&&q="+keywords+"&&site=" + site + "&&page=" + str(page)).json()['items']
 
-def print_questions(questions):
+def print_questions(questions, page):
 	for i, option in enumerate(questions):
 		print("%d. %s" % (i, html.unescape(option['title'])))
 	if len(questions) == 30:
 		print(str(len(questions)) + ". Next Page")
 	if page > 1:
 		print(str(len(questions)+int(len(questions) == 30)) + ". Previous Page")
+
+def handle_input(questions, page, q):
+	try:
+		q = questions[int(q)]['link']
+	except ValueError:
+		exit()
+	except IndexError:
+		if int(q) == 30:
+			q = "Next Page"
+			if q.lower().startswith("next"):
+				page += 1
+		elif int(q) == len(questions) + int(len(questions)== 30):
+			q = "Previous Page"
+			if q.lower().startswith("previous"):
+				page -= 1
+		else:
+			exit()
+	else:
+		os.system('python3 soparser.py ' + q)
+	return page
 
 def browse(site):
 	page = 1
@@ -54,27 +74,10 @@ def browse(site):
 			questions = get_page(page)
 		if len(questions) == 0:
 			exit("No results matched your query.")
-		print_questions()
+		print_questions(questions, page)
 		print("Type in a number or option: ")
 		q = input()
-		try:
-			q = questions[int(q)]['link']
-		except ValueError:
-			exit()
-		except IndexError:
-			if int(q) == 30:
-				q = "Next Page"
-				if q.lower().startswith("next"):
-					page += 1
-			elif int(q) == len(questions) + int(len(questions)== 30):
-				q = "Previous Page"
-				if q.lower().startswith("previous"):
-					page -= 1
-			else:
-				exit()
-		else:
-			os.system('python3 soparser.py ' + q)
-			break
+		page = handle_input(questions, page, q)
 
 site = get_site()
 browse(site)
