@@ -43,6 +43,8 @@ class DataFinder(HTMLParser):
 		# show links attached to words
 		if tag == "a" and self.startfound:
 			self.text += "(%s)" % attrs[0][1]
+		if tag == "li" and self.startfound:
+			self.text += "\n- "
 	def handle_endtag(self, tag):
 		if tag == "div" and self.startfound:
 			self.tagsfound -= 1
