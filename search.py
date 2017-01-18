@@ -1,5 +1,9 @@
 import requests, sys, os, html
 
+def exit(msg="Invalid option."):
+	print(msg)
+	sys.exit()
+
 keywords = " ".join(sys.argv[1:])
 
 sites = [
@@ -20,23 +24,23 @@ try:
 	site = sites[int(site)]
 except ValueError:
 	pass
+except IndexError:
+	site = "gheuipoklagopiahgoeqhhriszxljjsahjlvhlishuifwrhuighiulhuishuliguea"
 if site not in sites:
-	print("THAT ISN'T A WEBSITE!!!!")
-	sys.exit()
+	exit()
 else:
 	print("Searching " + site)
 
 page = 1
 lastpage = 0
+
+
 while True:
 	if not lastpage == page:
 		lastpage = page
 		questions = requests.get("https://api.stackexchange.com/2.2/search/advanced?sort=relevance&&answers=1&&q="+keywords+"&&site=" + site + "&&page=" + str(page)).json()['items']
-
 	if len(questions) == 0:
-		print("No results matched your query.")
-		sys.exit()
-
+		exit("No results matched your query.")
 	for i, option in enumerate(questions):
 		print("%d. %s" % (i, html.unescape(option['title'])))
 	if len(questions) == 30:
@@ -48,7 +52,7 @@ while True:
 	try:
 		q = questions[int(q)]['link']
 	except ValueError:
-		pass
+		exit()
 	except IndexError:
 		if int(q) == 30:
 			q = "Next Page"
@@ -58,6 +62,8 @@ while True:
 			q = "Previous Page"
 			if q.lower().startswith("previous"):
 				page -= 1
+		else:
+			exit()
 	else:
 		os.system('python3 soparser.py ' + q)
 		break
